@@ -2,6 +2,7 @@ package com.gabor.upvote.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -46,12 +47,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/ideas/pending/**", "/api/ideas/*/approve/**", "/api/ideas/*/delete/**").hasRole("ADMIN")
+                        .requestMatchers("/votes/**", "/api/ideas/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form.permitAll())
+                .httpBasic(Customizer.withDefaults()) // 🔹 FONTOS: ez engedélyezi a Basic Auth-ot Swagger számára
+              //  .formLogin(form -> form.permitAll())
                 .logout(logout -> logout.permitAll())
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**")
+                        .ignoringRequestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**", "/votes/**","/api/ideas/**" )
                 )
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
