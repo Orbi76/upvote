@@ -8,12 +8,11 @@ package com.gabor.upvote.service;
         import org.mockito.Mockito;
 
         import java.util.List;
-        import java.util.Optional;
 
         import static org.junit.jupiter.api.Assertions.*;
         import static org.mockito.Mockito.*;
 
-class VoteServiceTest {
+class VoteServiceTestB {
 
     private VoteRepository voteRepository;
     private VoteService voteService;
